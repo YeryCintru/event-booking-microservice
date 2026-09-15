@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Base de datos para Auth Service
+  auth-db:
+    image: postgres:15-alpine
+    container_name: auth-db
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+
+  # Base de datos para Event Service
+  event-db:
+    image: postgres:15-alpine
+    container_name: event-db
+    environment:
+      POSTGRES_DB: event_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - event_db_data:/var/lib/postgresql/data
+
+  # Base de datos para Booking Service
+  booking-db:
+    image: postgres:15-alpine
+    container_name: booking-db
+    environment:
+      POSTGRES_DB: booking_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5434:5432"
+    volumes:
+      - booking_db_data:/var/lib/postgresql/data
+
+volumes:
+  auth_db_data:
+  event_db_data:
+  booking_db_data:
