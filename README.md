@@ -58,3 +58,13 @@
 - Kubernetes
 - GitHub CI/CD
 - Cloud Deploy AWS
+
+# Pruebas curl
+
+**Event-service**
+
+```cmd
+curl.exe -X POST http://localhost:8082/api/events `
+  -H "Content-Type: application/json" `
+  -d '{\"title\": \"Conferencia de Arquitectura Software\", \"description\": \"Evento sobre microservicios y K8s\", \"dateTime\": \"2026-10-15T18:00:00\", \"totalCapacity\": 100}'
+```
