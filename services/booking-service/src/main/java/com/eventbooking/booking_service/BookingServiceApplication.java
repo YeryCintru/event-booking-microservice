@@ -1,4 +1,4 @@
-package eventbooking.booking_service;
+package com.eventbooking.booking_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
