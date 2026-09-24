@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/events")
+@RequestMapping("/api/events")
 @RequiredArgsConstructor 
 public class EventController {
     private final EventService eventService;
@@ -28,4 +28,14 @@ public class EventController {
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.getEventById(id));
     }
+
+    @PutMapping("/{id}/reserve")
+    public ResponseEntity<Void> reserveTickets(
+        @PathVariable ("id") Long id,
+        @RequestParam("quantity") Integer quantity) {
+
+            eventService.reduceAvailableCapacity(id, quantity);
+            return ResponseEntity.ok().build();
+        }
+
 }
