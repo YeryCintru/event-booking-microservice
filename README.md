@@ -61,7 +61,9 @@
 
 # Pruebas curl
 
-**Event-service**
+## Event-service
+
+**Crear un evento**
 
 ```cmd
 curl.exe -X POST http://localhost:8082/api/events `
@@ -69,10 +71,22 @@ curl.exe -X POST http://localhost:8082/api/events `
   -d '{\"title\": \"Conferencia de Arquitectura Software\", \"description\": \"Evento sobre microservicios y K8s\", \"dateTime\": \"2026-10-15T18:00:00\", \"totalCapacity\": 100}'
 ```
 
+**Reducri la capacidad de un evento**
+
+```cmd
+curl.exe -v -X PUT "http://localhost:8082/api/events/2/reserve?quantity=10"
+```
+
+**Info para un evento**
+
+```cmd
+curl.exe -v -X GET "http://localhost:8082/api/events/1"
+```
 
 
+## Booking service
 
-**Booking service**
+**Reservar un evento**
 
 ```cmd
 curl.exe -X POST http://localhost:8083/api/bookings `
