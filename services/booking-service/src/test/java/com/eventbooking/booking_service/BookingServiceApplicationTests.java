@@ -1,4 +1,4 @@
-package eventbooking.booking_service;
+package com.eventbooking.booking_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

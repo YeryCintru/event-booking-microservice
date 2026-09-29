@@ -4,6 +4,7 @@ import com.eventbooking.event_service.model.Event;
 import com.eventbooking.event_service.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,21 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository eventRepository;
+
+    @Transactional
+    public void reduceAvailableCapacity(Long eventId, Integer quantity){
+        if (quantity <= 0){
+            throw new IllegalArgumentException("La cantidad de entradas debe ser mayor a cero");
+        }
+
+
+        int rowsUpdated = eventRepository.reduceCapacity(eventId,quantity);
+
+        if (rowsUpdated == 0) {
+            throw new IllegalStateException("No hay aforo suficiente disponible o el evento no existe.");
+        }
+    }
+
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
