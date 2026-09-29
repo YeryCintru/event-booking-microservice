@@ -20,8 +20,11 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestBody BookingRequestDTO bookingRequestDTO) {
-        Booking createdBooking = bookingService.createBooking(bookingRequestDTO);
+    public ResponseEntity<Booking> createBooking(
+        @RequestBody BookingRequestDTO bookingRequestDTO,
+        @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        Booking createdBooking = bookingService.createBooking(bookingRequestDTO, authHeader);
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
 

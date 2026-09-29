@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.*;
 public interface AuthClient {
     
     @GetMapping ("/validate")
-    boolean validateToken(@RequestHeader("Authorization") String token);
+    boolean validateToken(@RequestParam("token") String token);
 }
