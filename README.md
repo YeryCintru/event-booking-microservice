@@ -61,6 +61,28 @@
 
 # Pruebas curl
 
+## Auth-service
+
+- Token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VhcmlvVGVzdCIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzkwNjg5NTMwLCJleHAiOjE3OTA3NzU5MzB9.X1U68gSeEP-rwFwqe-ptvJpyrbWjbV9M1Z5AJEYFjWk
+
+**Register**
+
+```cmd
+curl.exe -X POST http://localhost:8081/api/auth/register `
+  -H "Content-Type: application/json" `
+  -d '{\"email\":\"usuarioTest\", \"password\":\"123456\"}'
+```
+
+**Login**
+
+
+```cmd
+curl.exe -X POST http://localhost:8081/api/auth/login `
+  -H "Content-Type: application/json" `
+  -d '{\"email\":\"usuarioTest\", \"password\":\"123456\"}'
+```
+
+
 ## Event-service
 
 **Crear un evento**
@@ -86,10 +108,21 @@ curl.exe -v -X GET "http://localhost:8082/api/events/1"
 
 ## Booking service
 
-**Reservar un evento**
+**Reservar un evento sin bearer**
+
 
 ```cmd
 curl.exe -X POST http://localhost:8083/api/bookings `
   -H "Content-Type: application/json" `
+  -d '{\"userId\": 1, \"eventId\": 1, \"ticketsCount\": 2}'
+```
+
+
+**Reservar con Bearer**
+
+```cmd
+curl.exe -X POST http://localhost:8083/api/bookings `
+  -H "Content-Type: application/json" `
+  -H "Authorization: Bearer TU_TOKEN_JWT_AQUI" `
   -d '{\"userId\": 1, \"eventId\": 1, \"ticketsCount\": 2}'
 ```
