@@ -26,9 +26,9 @@ export const EventList: React.FC = () => {
             await bookingApi.post('',{
                 userId: 1,
                 eventId,
-                ticketsQuantity: quantity,
+                ticketsCount: quantity,
             });
-            setMessage('¡Reserva de ${quantity} entrada(s) confirmada!');
+            setMessage(`¡Reserva de ${quantity} entrada(s) confirmada!`);
             fetchEvents(); //Recargar aforo en tiempo real
         } catch(err: any) {
             setMessage(err.response?.data?.message || 'Error al procesar la reserva');

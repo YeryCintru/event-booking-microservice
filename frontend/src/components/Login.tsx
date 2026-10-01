@@ -6,14 +6,14 @@ interface LoginProps{
 }
 
 export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
-    const [username, setUsername] = useState('usuarioTest');
+    const [email, setEmail] = useState('usuarioTest');
     const [password, setPassword] = useState('123456');
     const [error, setError] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try{
-            const response = await authApi.post('/login', {username, password});
+            const response = await authApi.post('/login', {email, password});
             const token = response.data.token;
             localStorage.setItem('jwt_token',token);
             onLoginSuccess(token);
@@ -29,7 +29,7 @@ return (
         <form onSubmit={handleSubmit}>
             <div>
                 <label>Usuario:</label>
-                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} style={{ width: '100%', marginBottom: '10px' }}></input>
+                <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: '100%', marginBottom: '10px' }}></input>
             </div>
             <div>
                 <label>Contraseña:</label>

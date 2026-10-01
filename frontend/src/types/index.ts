@@ -1,5 +1,5 @@
 export interface User {
-  username: string;
+  email: string;
   token: string;
 }
 
@@ -13,5 +13,5 @@ export interface Event {
 export interface BookingRequest {
   userId: number;
   eventId: number;
-  ticketsQuantity: number;
+  ticketsCount: number;
 }
