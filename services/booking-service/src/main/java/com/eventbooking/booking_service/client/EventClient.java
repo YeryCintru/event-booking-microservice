@@ -4,7 +4,8 @@ import com.eventbooking.booking_service.dto.EventDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "event-service", url = "http://localhost:8082/api/events")
+@FeignClient(name = "event-service", 
+            url = "${EVENT_SERVICE_URL:http://localhost:8082}/api/events")
 public interface EventClient {
     
     @GetMapping("/{id}")
