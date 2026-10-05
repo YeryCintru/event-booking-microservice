@@ -40,6 +40,57 @@ services:
     volumes:
       - booking_db_data:/var/lib/postgresql/data
 
+  # Servicios para la aplicación
+  #AuthService
+  auth-service:
+    image: eventbooking/auth-service:v1
+    container_name: auth-service
+    ports:
+      - "8081:8081" 
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db:5432/auth_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgrespassword
+    depends_on:
+      - auth-db
+  # EventService
+  event-service:
+    image: eventbooking/event-service:v1
+    container_name: event-service
+    ports:
+      - "8082:8082" 
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://event-db:5432/event_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgrespassword
+    depends_on:
+      - event-db
+  # BookingService
+  booking-service:
+    image: eventbooking/booking-service:v1
+    container_name: booking-service
+    ports:
+      - "8083:8083" 
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://booking-db:5432/booking_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgrespassword
+      - AUTH_SERVICE_URL=http://auth-service:8081
+      - EVENT_SERVICE_URL=http://event-service:8082
+    depends_on:
+      - booking-db
+      - auth-service
+      - event-service
+
+  # Frontend
+  frontend:
+    image: eventbooking/frontend:v1
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - booking-service
+
 volumes:
   auth_db_data:
   event_db_data:
