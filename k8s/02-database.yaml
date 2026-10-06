@@ -1,0 +1,134 @@
+# AUTH DATABASE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-db
+  template:
+    metadata:
+      labels:
+        app: auth-db
+    spec:
+      containers:
+        - name: auth-db
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_DB
+              value: auth_db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: postgres-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: postgres-password
+          ports:
+            - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-db
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: auth-db
+---
+# event DATABASE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-db
+  template:
+    metadata:
+      labels:
+        app: event-db
+    spec:
+      containers:
+        - name: event-db
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_DB
+              value: event_db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: postgres-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: postgres-password
+          ports:
+            - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-db
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: event-db
+---
+# booking DATABASE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booking-db
+  template:
+    metadata:
+      labels:
+        app: booking-db
+    spec:
+      containers:
+        - name: booking-db
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_DB
+              value: booking_db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: postgres-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: postgres-password
+          ports:
+            - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booking-db
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: booking-db

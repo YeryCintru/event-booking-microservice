@@ -1,0 +1,151 @@
+# AUTH SERVICE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: eventbooking/auth-service:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://auth-db:5432/auth_db
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef: 
+                  name: db-credentials
+                  key: postgres-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef: 
+                  name: db-credentials
+                  key: postgres-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8081
+      targetPort: 8081
+  selector:
+    app: auth-service
+---
+# event SERVICE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-service
+  template:
+    metadata:
+      labels:
+        app: event-service
+    spec:
+      containers:
+        - name: event-service
+          image: eventbooking/event-service:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://event-db:5432/event_db
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef: 
+                  name: db-credentials
+                  key: postgres-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef: 
+                  name: db-credentials
+                  key: postgres-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8082
+      targetPort: 8082
+  selector:
+    app: event-service
+---
+# booking SERVICE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booking-service
+  template:
+    metadata:
+      labels:
+        app: booking-service
+    spec:
+      containers:
+        - name: booking-service
+          image: eventbooking/booking-service:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://booking-db:5432/booking_db
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef: 
+                  name: db-credentials
+                  key: postgres-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef: 
+                  name: db-credentials
+                  key: postgres-password
+            - name: AUTH_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AUTH_SERVICE_URL
+            - name: EVENT_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: EVENT_SERVICE_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booking-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8083
+      targetPort: 8083
+  selector:
+    app: booking-service
+---
