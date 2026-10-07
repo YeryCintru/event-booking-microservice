@@ -70,7 +70,6 @@ jobs:
           context: ./auth-service
           push: false
           tags: eventbooking/auth-service:test
-        uses: docker/setup-buildx-action@v3
 
       - name: Build imagen Event Service
         uses: docker/build-push-action@v5
@@ -78,7 +77,6 @@ jobs:
           context: ./event-service
           push: false
           tags: eventbooking/event-service:test
-        uses: docker/setup-buildx-action@v3
 
       - name: Build imagen Booking Service
         uses: docker/build-push-action@v5
@@ -86,7 +84,6 @@ jobs:
           context: ./booking-service
           push: false
           tags: eventbooking/booking-service:test
-        uses: docker/setup-buildx-action@v3
 
       - name: Build imagen Frontend
         uses: docker/build-push-action@v5
