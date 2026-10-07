@@ -28,7 +28,7 @@ jobs:
         
       - name: Compilar y testear ${{matrix.service}}
         run: |
-          cd ${{matrix.service}}
+          cd services/${{matrix.service}}
           mvn clean test package -DskipTests=false
 
   # JOB 2: Validar Build de Frontend
