@@ -1,3 +1,58 @@
+# 🎟️ EventBooking - Microservices Platform
+
+Sistema distribuido de gestión de eventos y reserva de entradas construido con **Java 21 / Spring Boot**, **React + TypeScript**, **Docker** y **Kubernetes**.
+
+---
+
+## 🏗️ Arquitectura del Sistema
+
+[ Frontend (React/Nginx) ]
+│
+├───► [ Auth Service (8081) ] ──────► [ PostgreSQL (auth_db) ]
+├───► [ Event Service (8082) ] ─────► [ PostgreSQL (event_db) ]
+└───► [ Booking Service (8083) ] ───► [ PostgreSQL (booking_db) ]
+│  (OpenFeign)
+└───► [ Auth & Event Services ]
+
+
+### **Componentes:**
+* **Auth Service (8081):** Autenticación, registro y generación de tokens JWT.
+* **Event Service (8082):** Gestión del catálogo de eventos y control de aforo.
+* **Booking Service (8083):** Procesamiento de reservas conectando con Auth y Event vía OpenFeign.
+* **Frontend:** App SPA en React + Vite servida por Nginx.
+* **Infraestructura:** Bases de datos aisladas en PostgreSQL, empaquetado Docker multi-stage y manifiestos de Kubernetes para Kind/Minikube.
+
+---
+
+## 🚀 Guía de Ejecución Local
+
+### **Opción 1: Docker Compose**
+
+# Levantar toda la infraestructura y servicios con un comando:
+docker-compose up --build
+Frontend: http://localhost
+
+Puertos Backend: 8081 (Auth), 8082 (Event), 8083 (Booking)
+
+Opción 2: Kubernetes (Kind)
+Bash
+# 1. Crear clúster y cargar imágenes
+kind create cluster --name eventbooking-cluster
+kind load docker-image eventbooking/auth-service:v1 --name eventbooking-cluster
+kind load docker-image eventbooking/event-service:v1 --name eventbooking-cluster
+kind load docker-image eventbooking/booking-service:v1 --name eventbooking-cluster
+kind load docker-image eventbooking/frontend:v1 --name eventbooking-cluster
+
+# 2. Desplegar manifiestos
+kubectl apply -f k8s/
+
+# 3. Acceder al Frontend
+kubectl port-forward service/frontend 8080:80
+
+## ⚙️ CI/CD Pipeline
+El repositorio incluye integración continua con GitHub Actions (.github/workflows/ci-cd.yml) para verificar automáticamente el build de Java Maven, Node.js y la construcción de imágenes Docker en cada push a la rama principal.
+
+
 # Requisitos
 
 - 45-50h
