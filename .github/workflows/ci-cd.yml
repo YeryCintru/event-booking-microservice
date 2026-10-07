@@ -67,21 +67,21 @@ jobs:
       - name: Build imagen Auth Service
         uses: docker/build-push-action@v5
         with:
-          context: ./auth-service
+          context: ./services/auth-service
           push: false
           tags: eventbooking/auth-service:test
 
       - name: Build imagen Event Service
         uses: docker/build-push-action@v5
         with:
-          context: ./event-service
+          context: ./services/event-service
           push: false
           tags: eventbooking/event-service:test
 
       - name: Build imagen Booking Service
         uses: docker/build-push-action@v5
         with:
-          context: ./booking-service
+          context: ./services/booking-service
           push: false
           tags: eventbooking/booking-service:test
 
