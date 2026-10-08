@@ -36,7 +36,7 @@ export const EventList: React.FC = () => {
     };
 
     return(
-        <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto'}}>
+        <div id="events" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto'}}>
             <h2>Catálogo de eventos</h2>
             {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
             <div style={{display: 'grid', gap: '15px'}}>
@@ -63,5 +63,4 @@ export const EventList: React.FC = () => {
         </div>
     );
 };
-
 

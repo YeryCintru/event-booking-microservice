@@ -23,7 +23,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     };
    
 return (
-    <div style={{ maxWidth: '300px', margin: '20px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px'}}>
+    <div id="login" style={{ maxWidth: '500px', margin: '20px auto', padding: '40px', border: '1px solid #ccc', borderRadius: '8px'}}>
         <h2>Iniciar Sesión</h2>
         {error && <p style={{color: 'red'}}>{error}</p>}
         <form onSubmit={handleSubmit}>
@@ -41,4 +41,3 @@ return (
 );
  
 };
-
