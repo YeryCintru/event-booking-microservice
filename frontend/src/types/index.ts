@@ -10,6 +10,15 @@ export interface Event {
   availableCapacity: number;
 }
 
+export interface Booking {
+  id: number;    
+  userId: number;
+  eventId: number;
+  ticketsCount: number;
+  status: string; // Ej: "CONFIRMED", "CANCELLED", "PENDING"
+  createdAt: Date;
+}
+
 export interface BookingRequest {
   userId: number;
   eventId: number;

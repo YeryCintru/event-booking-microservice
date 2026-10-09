@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { EventList } from "./components/EventList";
+import  { BookingList} from "./components/BookingList"
 import { Login} from "./components/Login";
+import { Routes, Route, Link } from "react-router-dom";
 
 export function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem('jwt_token'));
@@ -19,9 +21,9 @@ export function App() {
             <span>EventBooking</span>
           </a>
           <nav className="site-nav-links" aria-label="Navegación principal">
-            <a className="site-nav-link" href={token ? "#events" : "#login"}>
+            <Link className="site-nav-link" to={token ? "/" : "/login"}>
               {token ? "Eventos" : "Iniciar sesión"}
-            </a>
+            </Link>
           </nav>
           {token && (
             <button className="logout-button" onClick={handleLogout}>
@@ -32,16 +34,19 @@ export function App() {
       </header>
 
       <main className="app-main">
-        {!token ? (
-          <Login onLoginSuccess={(newToken) => setToken(newToken)} />
-        ) : (
-          <EventList />
-        )}
+       <Routes>
+        <Route path="/" element={<EventList />}></Route>  
+        <Route path="/bookings" element={<BookingList />}></Route>  
+        <Route path="/login" element={<Login onLoginSuccess={(newToken) => setToken(newToken)} />}></Route>  
+      </Routes>  
       </main>
       <footer className="site-footer">
         Yeray Navascués Trincado <br />
         Sistema de gestión de eventos
       </footer>
+
+      
+
     </div>
   )
 };
