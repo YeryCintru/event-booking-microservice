@@ -77,7 +77,7 @@ body {
 }
 
 .site-nav {
-  width: min(1120px, 100%);
+  width: 100%;
   min-height: 76px;
   margin: 0 auto;
   padding: 0 24px;
@@ -166,6 +166,12 @@ body {
   font-size: 14px;
   line-height: 1.6;
 }
+
+.butn {
+  background: rgb(90, 132, 132);
+  border-radius: 8px;
+}
+
 
 @media (max-width: 560px) {
   .site-nav {
