@@ -7,10 +7,12 @@ export const BookingList: React.FC = () => {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [message, setMessage] = useState('');
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
 
     const fetchBookings = async () => {
         try{
-            const response = await bookingApi.get<Booking[]>(`/user/1`);
+            const response = await bookingApi.get<Booking[]>(`/user/${user.id}`);
             setBookings(response.data);
         } catch (err) {
             setMessage('Error al cargar la lista de eventos');
