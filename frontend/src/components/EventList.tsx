@@ -21,7 +21,7 @@ export const EventList: React.FC = () => {
 
     useEffect(() => {
         fetchEvents();
-    }, []);
+    }, [selectedEvent]);
 
    
 

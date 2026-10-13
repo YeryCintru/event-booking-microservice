@@ -11,12 +11,14 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
     
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [message, setMessage] = useState('');
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
 
      const handleBooking = async (eventId: number) => {
         const quantity = quantities[eventId] || 1;
         try{
             await bookingApi.post('',{
-                userId: 1,
+                userId: user.id,
                 eventId,
                 ticketsCount: quantity,
             });
