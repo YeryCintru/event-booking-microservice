@@ -18,6 +18,11 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             const response = await authApi.post('/login', {email, password});
             const token = response.data.token;
             localStorage.setItem('jwt_token',token);
+            localStorage.setItem('user',JSON.stringify({
+                id: response.data.id,
+                email: response.data.email,
+                rol: response.data.rol
+            }));
             navigate('/');
             onLoginSuccess(token);
         } catch (err){

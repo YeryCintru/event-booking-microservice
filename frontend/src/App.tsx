@@ -3,6 +3,7 @@ import { EventList } from "./components/EventList";
 import  { BookingList} from "./components/BookingList"
 import { Login} from "./components/Login";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Profile } from "./components/Profile";
 
 export function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem('jwt_token'));
@@ -10,6 +11,7 @@ export function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user');
     navigate('/login');
     setToken(null);
 
@@ -24,6 +26,9 @@ export function App() {
             <span>EventBooking</span>
           </a>
           <nav className="site-nav-links" aria-label="Navegación principal">
+            <Link className="site-nav-link" to={token ? "/profile" : "/login"}>
+              {token ? "Perfil" : ""}
+            </Link>
             <Link className="site-nav-link" to={token ? "/" : "/login"}>
               {token ? "Eventos" : "Iniciar sesión"}
             </Link>
@@ -40,6 +45,7 @@ export function App() {
        <Routes>
         <Route path="/" element={<EventList />}></Route>  
         <Route path="/bookings" element={<BookingList />}></Route>  
+        <Route path="/profile" element={<Profile />}></Route>  
         <Route path="/login" element={<Login onLoginSuccess={(newToken) => setToken(newToken)} />}></Route>  
       </Routes>  
       </main>
