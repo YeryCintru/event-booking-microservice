@@ -43,7 +43,7 @@ services:
   # Servicios para la aplicación
   #AuthService
   auth-service:
-    image: eventbooking/auth-service:v1
+    build: ./services/auth-service
     container_name: auth-service
     ports:
       - "8081:8081" 
