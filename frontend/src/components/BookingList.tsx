@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { eventApi, bookingApi } from '../api/axiosConfig';
 import type { Event, Booking } from '../types';
+import { EventModalBooking } from './EventModalbooking';
 
 export const BookingList: React.FC = () => {
     const [bookings, setBookings] = useState<Booking[]>([]);
-    const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [message, setMessage] = useState('');
 
     const fetchBookings = async () => {
@@ -15,6 +16,15 @@ export const BookingList: React.FC = () => {
             setMessage('Error al cargar la lista de eventos');
         }
     };
+
+    const fetchEvent = async (booking:any) => {
+        try{
+            const event = await eventApi.get<Event>(`/${booking.eventId}`);
+            setSelectedEvent(event.data);
+        } catch (err){
+            setMessage('No se ha podido recuperar la información del evento');
+        }
+    }
 
     useEffect(() => {
         fetchBookings();
@@ -41,12 +51,24 @@ export const BookingList: React.FC = () => {
                             <p>Número de tickets: {book.ticketsCount}</p>
                         </div>
                         <div>
-                            <button>Ver evento</button>
+                            <button onClick={() => fetchEvent(book)}>
+                                Ver evento</button>
                         </div>
                     </div>
 
                 ))}
-                <div></div>
+                 <div>
+                    {selectedEvent && (
+                            <div className='modal-overlay'>
+                                <div className='modal-content'>
+                                    <EventModalBooking 
+                                    event={selectedEvent}
+                                    closeModal={() => setSelectedEvent(null)}
+                                    />
+                                </div>
+                            </div>
+                                )}
+                </div>
             </div>
             </div>
             
