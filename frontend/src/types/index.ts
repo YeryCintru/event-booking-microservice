@@ -6,6 +6,8 @@ export interface User {
 export interface Event {
   id: number;
   title: string;
+  description: string;
+  dateTime: Date;
   totalCapacity: number;
   availableCapacity: number;
 }

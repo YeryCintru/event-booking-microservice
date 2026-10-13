@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { eventApi, bookingApi } from '../api/axiosConfig';
 import type { Event } from '../types';
 import { Link, Router, useNavigate } from 'react-router-dom';
+import { EventModal } from './EventModal';
 
 export const EventList: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [message, setMessage] = useState('');
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const navigate = useNavigate();
 
     const fetchEvents = async () => {
@@ -39,30 +41,48 @@ export const EventList: React.FC = () => {
 
     return(
         <div id="events" style={{ padding: '20px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center'}}>
-            <div style={{flex: 0.5}}>
+            <div style={{flex: 0.6}}>
             <h2>Catálogo de eventos</h2>
             {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
-            <div style={{display: 'grid', gap: '15px'}}>
-                {events.map((evt) => (
-                    <div key={evt.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                            <h3>{evt.title}</h3>
-                            <p>Aforo Disponible: <strong>{evt.availableCapacity} / {evt.totalCapacity}</strong></p>                            
+                <div style={{display: 'grid', gap: '15px'}}>
+                    
+                    {events.map((evt) => (
+                        <div key={evt.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <h3>{evt.title}</h3>
+                                <p>Aforo Disponible: <strong>{evt.availableCapacity} / {evt.totalCapacity}</strong></p>                            
+                            </div>
+                            <div>
+                                <button onClick={() => setSelectedEvent(evt)} style={{width:'80px', height:'30px',fontSize:'14px'}}>
+                                    Ver más
+                                </button>
+                                
+                            </div>
+                            <div>
+                                <input type="number" min="1" max={evt.availableCapacity} value={quantities[evt.id] || 1}
+                                    onChange={(e) => setQuantities ({... quantities, [evt.id]: parseInt(e.target.value) || 1})}
+                                    style={{ width: '50px', marginRight: '10px' }}
+                                />
+                                <button onClick={() => handleBooking(evt.id)} disabled={evt.availableCapacity <= 0}>
+                                    {evt.availableCapacity > 0 ? 'Reservar' : 'Agotado'}
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <input type="number" min="1" max={evt.availableCapacity} value={quantities[evt.id] || 1}
-                                onChange={(e) => setQuantities ({... quantities, [evt.id]: parseInt(e.target.value) || 1})}
-                                style={{ width: '50px', marginRight: '10px' }}
-                             />
-                             <button onClick={() => handleBooking(evt.id)} disabled={evt.availableCapacity <= 0}>
-                                {evt.availableCapacity > 0 ? 'Reservar' : 'Agotado'}
-                            </button>
-                        </div>
-                    </div>
 
-                ))}
-                <div></div>
+                    ))}
+                </div>
             </div>
+            <div>
+                {selectedEvent && (
+                        <div className='modal-overlay'>
+                            <div className='modal-content'>
+                                <EventModal 
+                                event={selectedEvent}
+                                closeModal={() => setSelectedEvent(null)}
+                                />
+                            </div>
+                        </div>
+                            )}
             </div>
             <div style={{display:'flex', flexDirection:'column'}}>
                 <h2>Gestión de eventos</h2>
