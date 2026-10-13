@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { authApi } from '../api/axiosConfig';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginProps{
     onLoginSuccess: (token: string) => void;
@@ -9,6 +10,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('usuarioTest');
     const [password, setPassword] = useState('123456');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -16,6 +18,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             const response = await authApi.post('/login', {email, password});
             const token = response.data.token;
             localStorage.setItem('jwt_token',token);
+            navigate('/');
             onLoginSuccess(token);
         } catch (err){
             setError('Credenciales inválidas o servicio inaccesible');

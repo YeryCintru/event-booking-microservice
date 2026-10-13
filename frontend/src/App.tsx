@@ -2,14 +2,17 @@ import { useState } from "react";
 import { EventList } from "./components/EventList";
 import  { BookingList} from "./components/BookingList"
 import { Login} from "./components/Login";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 export function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem('jwt_token'));
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
+    navigate('/login');
     setToken(null);
+
   };
 
   return (
