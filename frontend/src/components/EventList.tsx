@@ -6,7 +6,6 @@ import { EventModal } from './EventModal';
 
 export const EventList: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
-    const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [message, setMessage] = useState('');
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const navigate = useNavigate();
@@ -24,20 +23,7 @@ export const EventList: React.FC = () => {
         fetchEvents();
     }, []);
 
-    const handleBooking = async (eventId: number) => {
-        const quantity = quantities[eventId] || 1;
-        try{
-            await bookingApi.post('',{
-                userId: 1,
-                eventId,
-                ticketsCount: quantity,
-            });
-            setMessage(`¡Reserva de ${quantity} entrada(s) confirmada!`);
-            fetchEvents(); //Recargar aforo en tiempo real
-        } catch(err: any) {
-            setMessage(err.response?.data?.message || 'Error al procesar la reserva');
-        }
-    };
+   
 
     return(
         <div id="events" style={{ padding: '20px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center'}}>
@@ -58,15 +44,7 @@ export const EventList: React.FC = () => {
                                 </button>
                                 
                             </div>
-                            <div>
-                                <input type="number" min="1" max={evt.availableCapacity} value={quantities[evt.id] || 1}
-                                    onChange={(e) => setQuantities ({... quantities, [evt.id]: parseInt(e.target.value) || 1})}
-                                    style={{ width: '50px', marginRight: '10px' }}
-                                />
-                                <button onClick={() => handleBooking(evt.id)} disabled={evt.availableCapacity <= 0}>
-                                    {evt.availableCapacity > 0 ? 'Reservar' : 'Agotado'}
-                                </button>
-                            </div>
+                            
                         </div>
 
                     ))}
