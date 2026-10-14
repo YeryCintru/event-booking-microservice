@@ -180,4 +180,12 @@ curl.exe -X POST http://localhost:8083/api/bookings `
   -H "Content-Type: application/json" `
   -H "Authorization: Bearer TU_TOKEN_JWT_AQUI" `
   -d '{\"userId\": 1, \"eventId\": 1, \"ticketsCount\": 2}'
+```ç
+
+**Generar ticket**
+
+```cmd
+curl.exe -X GET http://localhost:8083/api/bookings/1/ticket `
+  -H "Content-Type: application/json" `
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VhcmlvVGVzdCIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzkxOTg2MzA1LCJleHAiOjE3OTIwNzI3MDV9.vdA8cLQmmySXxwRnu5TThk-HMMGtWgFLmpEuRr9HgU4" `
 ```

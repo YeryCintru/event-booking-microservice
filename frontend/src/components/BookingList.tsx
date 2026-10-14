@@ -3,6 +3,7 @@ import { eventApi, bookingApi } from '../api/axiosConfig';
 import type { Event, Booking } from '../types';
 import { EventModalBooking } from './EventModalbooking';
 
+
 export const BookingList: React.FC = () => {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -27,6 +28,30 @@ export const BookingList: React.FC = () => {
             setMessage('No se ha podido recuperar la información del evento');
         }
     }
+    
+    const handleTicket = async (booking:any) => {
+        try{
+            const response = await bookingApi.get<any>(`/${booking.id}/ticket`, {
+                responseType: 'blob'
+            });
+            const blob = new Blob([response.data], {type: 'application/pdf'});
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ticket-${booking.id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+
+            a.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (err){
+            setMessage('No se ha podido descargar la entrada');
+        } 
+    }
+
+    
 
     useEffect(() => {
         fetchBookings();
@@ -58,9 +83,13 @@ export const BookingList: React.FC = () => {
                         <div>
                             <p>Número de tickets: {book.ticketsCount}</p>
                         </div>
-                        <div>
+                        <div style={{display:'flex',flexDirection:'column', gap:'5px'}}>
                             <button onClick={() => fetchEvent(book)}>
                                 Ver evento</button>
+                                
+                            <button onClick={() => handleTicket(book)}>
+                                Descargar entrada</button>
+
                         </div>
                     </div>
 

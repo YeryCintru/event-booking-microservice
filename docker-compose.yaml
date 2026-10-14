@@ -67,7 +67,7 @@ services:
       - event-db
   # BookingService
   booking-service:
-    image: eventbooking/booking-service:v1
+    build: ./services/booking-service
     container_name: booking-service
     ports:
       - "8083:8083" 

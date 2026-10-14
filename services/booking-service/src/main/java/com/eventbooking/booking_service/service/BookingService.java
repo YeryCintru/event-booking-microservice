@@ -4,13 +4,19 @@ import com.eventbooking.booking_service.dto.*;
 import com.eventbooking.booking_service.client.*;
 import com.eventbooking.booking_service.model.Booking;
 import com.eventbooking.booking_service.repository.BookingRepository;
+import com.eventbooking.booking_service.service.TicketGeneratorService;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+
+import javax.print.attribute.standard.Media;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -19,6 +25,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final EventClient eventClient;
     private final AuthClient authClient;
+    private final TicketGeneratorService ticketgeneratorService;
 
     @Transactional
     public Booking createBooking(BookingRequestDTO bookingRequestDTO, String authHeader) {
@@ -67,5 +74,21 @@ public class BookingService {
     public List<Booking> getBookingsByUserId(Long userId) {
         return bookingRepository.findByUserId(userId);
     }
+
+    public byte[] downloadTicket(Long bookingId){
+        Booking booking = bookingRepository.getById(bookingId);
+        BookingDTO bookingDTO = new BookingDTO(booking);
+        EventDTO event = eventClient.getEventById(booking.getEventId());
+        byte[] pdfBytes = null;
+        try{
+        pdfBytes = ticketgeneratorService.generateTicketPdf(bookingDTO, event);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear la entrada en PDF");
+        }
+        return pdfBytes;
+
+    }
+
+
 
 }
