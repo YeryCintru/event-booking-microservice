@@ -45,8 +45,13 @@ public class TicketGeneratorService {
         Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
         document.add(new Paragraph("🎟️ Entrada Oficial - EventBooking", titleFont));
         document.add(new Paragraph("Evento" + event.getTitle()));
-        document.add(new Paragraph("Fecha: " + event.getClass()));
+        document.add(new Paragraph("Fecha: " + event.getTotalCapacity()));
         document.add(new Paragraph("Reserva ID: " + booking.getId()));
+        document.add(new Paragraph("Fecha de compra: " + booking.getCreatedAt()));
+        document.add(new Paragraph("Estado de compra: " + booking.getStatus()));
+        document.add(new Paragraph("Número de plazas: " + booking.getTicketsCount()));
+        
+
         
         String qrPayload = "https://eventbooking.com/verify?bookingId=" + booking.getId();
         byte[] qrBytes = generateQRCodeImage(qrPayload, 150, 150);
