@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import { useState} from "react";
 import { bookingApi } from "../api/axiosConfig";
-import type { Event } from "../types";
+
 
 interface EventModalProps {
     event: any;

@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { bookingApi } from "../api/axiosConfig";
-import type { Event } from "../types";
+import {useState} from "react";
+
 
 interface EventModalProps {
     event: any;
@@ -8,11 +7,6 @@ interface EventModalProps {
 }
 
 export const EventModalBooking = ({event, closeModal}: EventModalProps) => {
-    
-    const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
-    const [message, setMessage] = useState('');
-
-
 
     return (
     <div key={event.id} style={{ 
@@ -43,10 +37,7 @@ export const EventModalBooking = ({event, closeModal}: EventModalProps) => {
         <h3>{event.title}</h3>
         <p>{event.description}</p>      
         <p>Fecha de publicación: {new Date(event.dateTime).toDateString()}</p>  
-        <br />  
-        {message && (
-            <p>{message}</p>
-        )}                
+        <br />                 
     </div>
 </div>
 

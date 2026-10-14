@@ -1,4 +1,4 @@
-import React from "react";
+
 
 export const Profile = () => {
     const storedUser = localStorage.getItem('user');

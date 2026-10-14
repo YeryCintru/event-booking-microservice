@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { eventApi, bookingApi } from '../api/axiosConfig';
+import { eventApi } from '../api/axiosConfig';
 import type { Event } from '../types';
-import { Link, Router, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventModal } from './EventModal';
 
 export const EventList: React.FC = () => {
