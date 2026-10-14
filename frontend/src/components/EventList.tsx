@@ -9,6 +9,8 @@ export const EventList: React.FC = () => {
     const [message, setMessage] = useState('');
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const navigate = useNavigate();
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
 
     const fetchEvents = async () => {
         try{
@@ -26,24 +28,33 @@ export const EventList: React.FC = () => {
    
 
     return(
-        <div id="events" style={{ padding: '20px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center'}}>
-            <div style={{flex: 0.6}}>
-            <h2>Catálogo de eventos</h2>
+        <div>
+
+        <h1 style={{fontSize:'30px'}}>Bienvenido, <span style={{color:'rgb(57, 85, 85)'}}> {user.email}</span></h1>
+        <p style={{fontSize:'20px', color:'rgb(90, 132, 132)'}}>¡Consulta los eventos disponibles!</p>
+
+        <hr />
+        <br />
+        <div id="events" style={{ padding: '30px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center', background:'rgb(225, 236, 236)', borderRadius:'16px'}}>
+            <div style={{flex: 1}}>
+            <h2 style={{fontSize:'27px'}}>Catálogo de eventos</h2>
+            <br />
             {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
                 <div style={{display: 'grid', gap: '15px'}}>
                     
                     {events.map((evt) => (
-                        <div key={evt.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div key={evt.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center', background:'#fff' }}>
                             <div>
                                 <h3>{evt.title}</h3>
-                                <p>Aforo Disponible: <strong>{evt.availableCapacity} / {evt.totalCapacity}</strong></p>                            
-                            </div>
-                            <div>
+                                <p>Aforo Disponible: <strong>{evt.availableCapacity} / {evt.totalCapacity}</strong></p>    
+                                <br />                        
                                 <button onClick={() => setSelectedEvent(evt)} style={{width:'80px', height:'30px',fontSize:'14px'}}>
                                     Ver más
                                 </button>
                                 
                             </div>
+                                
+                           
                             
                         </div>
 
@@ -63,13 +74,15 @@ export const EventList: React.FC = () => {
                             )}
             </div>
             <div style={{display:'flex', flexDirection:'column'}}>
-                <h2>Gestión de eventos</h2>
+                <h2 style={{fontSize:'27px'}}>Gestión de reservas</h2>
+                <br />
                 <div style={{border:'1px solid #ddd',padding: '15px', borderRadius: '8px', display: 'flex',flexDirection:'column', justifyContent: 'space-between', alignItems: 'center'}}>
                     <button onClick={() => navigate('/bookings')} style={{width:'300px', height:'50px',fontSize:'18px'}}>Ver mis reservas</button>
 
                 </div>
             </div>
         </div>
+    </div>
     );
 };
 

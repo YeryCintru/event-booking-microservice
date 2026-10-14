@@ -35,9 +35,15 @@ export const BookingList: React.FC = () => {
  
 
     return(
+        <div>
+         <h2 style={{fontSize:'27px'}}>Reservas</h2>
+          <p style={{fontSize:'20px', color:'rgb(90, 132, 132)'}}>Consulta tus reservas</p>
+
+
+         <hr />
+        <br />            
         <div id="events" style={{ padding: '20px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center'}}>
             <div style={{flex: 0.5}}>
-            <h2>Reservas</h2>
             {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
             <div style={{display: 'grid', gap: '15px'}}>
                 {bookings.map((book) => (
@@ -74,6 +80,7 @@ export const BookingList: React.FC = () => {
             </div>
             </div>
             
+        </div>
         </div>
     );
 };

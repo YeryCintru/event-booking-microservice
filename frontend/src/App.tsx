@@ -21,7 +21,7 @@ export function App() {
     <div className="app-shell" id="top">
       <header className="site-header">
         <div className="site-nav">
-          <a className="site-brand" href="#top" aria-label="EventBooking, inicio">
+          <a className="site-brand" href="/" aria-label="EventBooking, inicio">
             <span className="site-brand-mark" aria-hidden="true">E</span>
             <span>EventBooking</span>
           </a>
