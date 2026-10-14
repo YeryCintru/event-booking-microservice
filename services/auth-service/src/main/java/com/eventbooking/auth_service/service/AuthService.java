@@ -30,7 +30,7 @@ public class AuthService {
 
         // Simulamos la devolución de token
         String token = jwtService.generateToken(user.getEmail(), user.getRole());
-        return new AuthResponse(token);
+        return new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
     }
 
     public AuthResponse login(LoginRequest request){
@@ -44,6 +44,6 @@ public class AuthService {
         // Simulamos la devolución de token
         String token = jwtService.generateToken(user.getEmail(), user.getRole()); 
 
-        return new AuthResponse(token);
+        return new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
     }
 }

@@ -6,8 +6,19 @@ export interface User {
 export interface Event {
   id: number;
   title: string;
+  description: string;
+  dateTime: Date;
   totalCapacity: number;
   availableCapacity: number;
+}
+
+export interface Booking {
+  id: number;    
+  userId: number;
+  eventId: number;
+  ticketsCount: number;
+  status: string; // Ej: "CONFIRMED", "CANCELLED", "PENDING"
+  createdAt: Date;
 }
 
 export interface BookingRequest {

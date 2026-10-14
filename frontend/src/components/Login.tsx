@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { authApi } from '../api/axiosConfig';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginProps{
     onLoginSuccess: (token: string) => void;
@@ -9,6 +10,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('usuarioTest');
     const [password, setPassword] = useState('123456');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -16,6 +18,12 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             const response = await authApi.post('/login', {email, password});
             const token = response.data.token;
             localStorage.setItem('jwt_token',token);
+            localStorage.setItem('user',JSON.stringify({
+                id: response.data.id,
+                email: response.data.email,
+                rol: response.data.rol
+            }));
+            navigate('/');
             onLoginSuccess(token);
         } catch (err){
             setError('Credenciales inválidas o servicio inaccesible');
@@ -23,7 +31,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     };
    
 return (
-    <div style={{ maxWidth: '300px', margin: '20px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px'}}>
+    <div id="login" style={{ maxWidth: '500px', margin: '20px auto', padding: '40px', border: '1px solid #ccc', borderRadius: '8px'}}>
         <h2>Iniciar Sesión</h2>
         {error && <p style={{color: 'red'}}>{error}</p>}
         <form onSubmit={handleSubmit}>
@@ -41,4 +49,3 @@ return (
 );
  
 };
-

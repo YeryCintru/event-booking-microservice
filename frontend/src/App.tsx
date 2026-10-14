@@ -1,27 +1,61 @@
 import { useState } from "react";
 import { EventList } from "./components/EventList";
+import  { BookingList} from "./components/BookingList"
 import { Login} from "./components/Login";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Profile } from "./components/Profile";
 
 export function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem('jwt_token'));
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user');
+    navigate('/login');
     setToken(null);
+
   };
 
   return (
-    <div className="App">
-      <header style={{ padding: '10px 20px', background: '#333', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-       <h1>Sistema de Reservas de eventos</h1> 
-       {token && <button onClick={handleLogout} style={{ padding: '5px 10px'}}>Cerrar sesión</button>}
+    <div className="app-shell" id="top">
+      <header className="site-header">
+        <div className="site-nav">
+          <a className="site-brand" href="/" aria-label="EventBooking, inicio">
+            <span className="site-brand-mark" aria-hidden="true">E</span>
+            <span>EventBooking</span>
+          </a>
+          <nav className="site-nav-links" aria-label="Navegación principal">
+            <Link className="site-nav-link" to={token ? "/profile" : "/login"}>
+              {token ? "Perfil" : ""}
+            </Link>
+            <Link className="site-nav-link" to={token ? "/" : "/login"}>
+              {token ? "Eventos" : "Iniciar sesión"}
+            </Link>
+          </nav>
+          {token && (
+            <button className="logout-button" onClick={handleLogout}>
+              Cerrar sesión
+            </button>
+          )}
+        </div>
       </header>
 
-      {!token ? (
-        <Login onLoginSuccess={(newToken) => setToken(newToken)} />
-      ) : (
-        <EventList />
-      )}
+      <main className="app-main">
+       <Routes>
+        <Route path="/" element={<EventList />}></Route>  
+        <Route path="/bookings" element={<BookingList />}></Route>  
+        <Route path="/profile" element={<Profile />}></Route>  
+        <Route path="/login" element={<Login onLoginSuccess={(newToken) => setToken(newToken)} />}></Route>  
+      </Routes>  
+      </main>
+      <footer className="site-footer">
+        Yeray Navascués Trincado <br />
+        Sistema de gestión de eventos
+      </footer>
+
+      
+
     </div>
   )
 };

@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { eventApi, bookingApi } from '../api/axiosConfig';
+import { eventApi } from '../api/axiosConfig';
 import type { Event } from '../types';
+import { useNavigate } from 'react-router-dom';
+import { EventModal } from './EventModal';
 
 export const EventList: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
-    const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [message, setMessage] = useState('');
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
+    const navigate = useNavigate();
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
 
     const fetchEvents = async () => {
         try{
@@ -18,50 +23,66 @@ export const EventList: React.FC = () => {
 
     useEffect(() => {
         fetchEvents();
-    }, []);
+    }, [selectedEvent]);
 
-    const handleBooking = async (eventId: number) => {
-        const quantity = quantities[eventId] || 1;
-        try{
-            await bookingApi.post('',{
-                userId: 1,
-                eventId,
-                ticketsCount: quantity,
-            });
-            setMessage(`¡Reserva de ${quantity} entrada(s) confirmada!`);
-            fetchEvents(); //Recargar aforo en tiempo real
-        } catch(err: any) {
-            setMessage(err.response?.data?.message || 'Error al procesar la reserva');
-        }
-    };
+   
 
     return(
-        <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto'}}>
-            <h2>Catálogo de eventos</h2>
-            {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
-            <div style={{display: 'grid', gap: '15px'}}>
-                {events.map((evt) => (
-                    <div key={evt.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                            <h3>{evt.title}</h3>
-                            <p>Aforo Disponible: <strong>{evt.availableCapacity} / {evt.totalCapacity}</strong></p>                            
-                        </div>
-                        <div>
-                            <input type="number" min="1" max={evt.availableCapacity} value={quantities[evt.id] || 1}
-                                onChange={(e) => setQuantities ({... quantities, [evt.id]: parseInt(e.target.value) || 1})}
-                                style={{ width: '50px', marginRight: '10px' }}
-                             />
-                             <button onClick={() => handleBooking(evt.id)} disabled={evt.availableCapacity <= 0}>
-                                {evt.availableCapacity > 0 ? 'Reservar' : 'Agotado'}
-                            </button>
-                        </div>
-                    </div>
+        <div>
 
-                ))}
-                <div></div>
+        <h1 style={{fontSize:'30px'}}>Bienvenido, <span style={{color:'rgb(57, 85, 85)'}}> {user.email}</span></h1>
+        <p style={{fontSize:'20px', color:'rgb(90, 132, 132)'}}>¡Consulta los eventos disponibles!</p>
+
+        <hr />
+        <br />
+        <div id="events" style={{ padding: '30px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center', background:'rgb(225, 236, 236)', borderRadius:'16px'}}>
+            <div style={{flex: 1}}>
+            <h2 style={{fontSize:'27px'}}>Catálogo de eventos</h2>
+            <br />
+            {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
+                <div style={{display: 'grid', gap: '15px'}}>
+                    
+                    {events.map((evt) => (
+                        <div key={evt.id} style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center', background:'#fff' }}>
+                            <div>
+                                <h3>{evt.title}</h3>
+                                <p>Aforo Disponible: <strong>{evt.availableCapacity} / {evt.totalCapacity}</strong></p>    
+                                <br />                        
+                                <button onClick={() => setSelectedEvent(evt)} style={{width:'80px', height:'30px',fontSize:'14px'}}>
+                                    Ver más
+                                </button>
+                                
+                            </div>
+                                
+                           
+                            
+                        </div>
+
+                    ))}
+                </div>
+            </div>
+            <div>
+                {selectedEvent && (
+                        <div className='modal-overlay'>
+                            <div className='modal-content'>
+                                <EventModal 
+                                event={selectedEvent}
+                                closeModal={() => setSelectedEvent(null)}
+                                />
+                            </div>
+                        </div>
+                            )}
+            </div>
+            <div style={{display:'flex', flexDirection:'column'}}>
+                <h2 style={{fontSize:'27px'}}>Gestión de reservas</h2>
+                <br />
+                <div style={{border:'1px solid #ddd',padding: '15px', borderRadius: '8px', display: 'flex',flexDirection:'column', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <button onClick={() => navigate('/bookings')} style={{width:'300px', height:'50px',fontSize:'18px'}}>Ver mis reservas</button>
+
+                </div>
             </div>
         </div>
+    </div>
     );
 };
-
 
