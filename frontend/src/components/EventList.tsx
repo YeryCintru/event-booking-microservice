@@ -35,8 +35,8 @@ export const EventList: React.FC = () => {
 
         <hr />
         <br />
-        <div id="events" style={{ padding: '30px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center', background:'rgb(225, 236, 236)', borderRadius:'16px'}}>
-            <div style={{flex: 1}}>
+        <div id="events" style={{ padding: '30px', margin: '0 auto', display:'flex', justifyContent:'center', background:'rgb(225, 236, 236)', borderRadius:'16px', alignItems:'center'}}>
+            <div style={{flex: 0.6}}>
             <h2 style={{fontSize:'27px'}}>Catálogo de eventos</h2>
             <br />
             {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
@@ -72,14 +72,6 @@ export const EventList: React.FC = () => {
                             </div>
                         </div>
                             )}
-            </div>
-            <div style={{display:'flex', flexDirection:'column'}}>
-                <h2 style={{fontSize:'27px'}}>Gestión de reservas</h2>
-                <br />
-                <div style={{border:'1px solid #ddd',padding: '15px', borderRadius: '8px', display: 'flex',flexDirection:'column', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <button onClick={() => navigate('/bookings')} style={{width:'300px', height:'50px',fontSize:'18px'}}>Ver mis reservas</button>
-
-                </div>
             </div>
         </div>
     </div>

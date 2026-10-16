@@ -30,6 +30,9 @@ export function App() {
             <Link className="site-nav-link" to={token ? "/profile" : "/login"}>
               {token ? "Perfil" : ""}
             </Link>
+            <Link className="site-nav-link" to={token ? "/bookings" : "/login"}>
+              {token ? "Mis reservas" : ""}
+            </Link>
             <Link className="site-nav-link" to={token ? "/" : "/login"}>
               {token ? "Eventos" : "Iniciar sesión"}
             </Link>
