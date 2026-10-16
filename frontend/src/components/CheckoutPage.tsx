@@ -38,7 +38,7 @@ export const CheckoutPage = () => {
         const initCheckout = async () => {
             try{
             const response = await bookingApi.post('create-payment-intent', {
-                amount:quantity*price,
+                amount:quantity*price+1.25,
             });
             setMessage('Procesando pago');
             setclientSecret(response.data.clientSecret);
