@@ -1,3 +1,4 @@
+
 :root {
   --text: #151316;
   --text-h: #08060d;
@@ -191,7 +192,7 @@ body {
   border-radius: 8px;
   width: 40vw;
   height: 50vh;
-  max-width: 600px;
+  max-width: 900px;
   max-height: 250px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }

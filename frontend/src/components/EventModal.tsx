@@ -1,5 +1,8 @@
 import { useState} from "react";
 import { bookingApi } from "../api/axiosConfig";
+import { CheckoutForm } from "./CheckoutForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 
 interface EventModalProps {
@@ -7,14 +10,18 @@ interface EventModalProps {
     closeModal: () => void;
 }
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
 export const EventModal = ({event, closeModal}: EventModalProps) => {
     
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [message, setMessage] = useState('');
     const storedUser = localStorage.getItem('user');
     const user = storedUser ? JSON.parse(storedUser) : null;
+    const [clientSecret,setclientSecret] = useState<string>('');
 
      const handleBooking = async (eventId: number) => {
+
         const quantity = quantities[eventId] || 1;
         try{
             await bookingApi.post('',{
@@ -27,6 +34,20 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
             setMessage(err.response?.data?.message || 'Error al procesar la reserva');
         }
     };
+
+    const handleCompra = async () => {
+        
+        try{
+            const response = await bookingApi.post('create-payment-intent', {
+                amount:5,
+            });
+            setMessage('Procesando pago');
+            setclientSecret(response.data.clientSecret);
+        } catch (err:any) {
+            setMessage('Error rocesando el pago');
+        }
+
+    }
 
 
     return (
@@ -68,7 +89,16 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
             <button onClick={() => handleBooking(event.id)} disabled={event.availableCapacity <= 0}>
                 {event.availableCapacity > 0 ? 'Reservar' : 'Agotado'}
             </button>
+            <button onClick={() => handleCompra()} disabled={event.availableCapacity <= 0}>
+                Ir a pagar
+            </button>
         </div>   
+        {clientSecret && (
+            <Elements stripe={stripePromise} options={{clientSecret}}>
+            <CheckoutForm clientSecret={clientSecret}/>
+            </Elements>
+        )}
+
         {message && (
             <p>{message}</p>
         )}                
