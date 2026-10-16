@@ -1,8 +1,6 @@
 import { useState} from "react";
-import { bookingApi } from "../api/axiosConfig";
-import { CheckoutForm } from "./CheckoutForm";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { useNavigate } from "react-router-dom";
+
 
 
 interface EventModalProps {
@@ -10,45 +8,11 @@ interface EventModalProps {
     closeModal: () => void;
 }
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
 export const EventModal = ({event, closeModal}: EventModalProps) => {
     
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [message, setMessage] = useState('');
-    const storedUser = localStorage.getItem('user');
-    const user = storedUser ? JSON.parse(storedUser) : null;
-    const [clientSecret,setclientSecret] = useState<string>('');
-
-     const handleBooking = async (eventId: number) => {
-
-        const quantity = quantities[eventId] || 1;
-        try{
-            await bookingApi.post('',{
-                userId: user.id,
-                eventId,
-                ticketsCount: quantity,
-            });
-            setMessage(`¡Reserva de ${quantity} entrada(s) confirmada!`);
-        } catch(err: any) {
-            setMessage(err.response?.data?.message || 'Error al procesar la reserva');
-        }
-    };
-
-    const handleCompra = async () => {
-        
-        try{
-            const response = await bookingApi.post('create-payment-intent', {
-                amount:5,
-            });
-            setMessage('Procesando pago');
-            setclientSecret(response.data.clientSecret);
-        } catch (err:any) {
-            setMessage('Error rocesando el pago');
-        }
-
-    }
-
+    const navigate = useNavigate();
 
     return (
     <div key={event.id} style={{ 
@@ -86,18 +50,17 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
                 onChange={(e) => setQuantities ({... quantities, [event.id]: parseInt(e.target.value) || 1})}
                 style={{ width: '50px', marginRight: '10px' }}
             />
-            <button onClick={() => handleBooking(event.id)} disabled={event.availableCapacity <= 0}>
-                {event.availableCapacity > 0 ? 'Reservar' : 'Agotado'}
-            </button>
-            <button onClick={() => handleCompra()} disabled={event.availableCapacity <= 0}>
+            <button onClick={() => navigate('/checkout', {
+                state: {
+                    event: event,
+                    ticketAmount: quantities[event.id]
+                }
+            })} 
+            disabled={event.availableCapacity <= 0}>
                 Ir a pagar
             </button>
         </div>   
-        {clientSecret && (
-            <Elements stripe={stripePromise} options={{clientSecret}}>
-            <CheckoutForm clientSecret={clientSecret}/>
-            </Elements>
-        )}
+        
 
         {message && (
             <p>{message}</p>
