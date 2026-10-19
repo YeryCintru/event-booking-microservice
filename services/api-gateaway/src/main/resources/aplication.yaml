@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateaway
+  cloud:
+    gateaway:
+      # Configuracion de los CORS global
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173,http://localhost"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      
+      # Reglas de enrutamiento
+      routes:
+        # Ruta hacia Auth Service
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/auth/**
+            
+        # Ruta hacia Event Service
+        - id: event-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/event/**
+        # Ruta hacia Booking Service
+        - id: booking-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/booking/**
+  
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, info, gateaway
