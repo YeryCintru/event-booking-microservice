@@ -24,6 +24,16 @@ public class PaymentService {
     }
 
     public PaymentIntent createPaymentIntent(Long amountInCents, String currency) throws StripeException {
+        
+        // Comprobaciones básicas
+        if (amountInCents == null || amountInCents <= 0) {
+            throw new IllegalArgumentException("El importe debe ser mayor a 0 céntimos");
+        }
+        if (currency == null || currency.isBlank()) {
+            throw new IllegalArgumentException("La moneda es obligatoria");
+        }
+
+        // PaymentIntent
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
             .setAmount(amountInCents) // Ej. 1500 = 15.00 EUR
             .setCurrency(currency)    // "eur" o "usd"
