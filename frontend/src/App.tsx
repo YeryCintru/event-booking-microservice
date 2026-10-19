@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EventList } from "./components/EventList";
 import  { BookingList} from "./components/BookingList"
+import  { CheckoutPage } from "./components/CheckoutPage"
 import { Login} from "./components/Login";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { Profile } from "./components/Profile";
@@ -29,6 +30,9 @@ export function App() {
             <Link className="site-nav-link" to={token ? "/profile" : "/login"}>
               {token ? "Perfil" : ""}
             </Link>
+            <Link className="site-nav-link" to={token ? "/bookings" : "/login"}>
+              {token ? "Mis reservas" : ""}
+            </Link>
             <Link className="site-nav-link" to={token ? "/" : "/login"}>
               {token ? "Eventos" : "Iniciar sesión"}
             </Link>
@@ -45,6 +49,7 @@ export function App() {
        <Routes>
         <Route path="/" element={<EventList />}></Route>  
         <Route path="/bookings" element={<BookingList />}></Route>  
+        <Route path="/checkout" element={< CheckoutPage/>}></Route>  
         <Route path="/profile" element={<Profile />}></Route>  
         <Route path="/login" element={<Login onLoginSuccess={(newToken) => setToken(newToken)} />}></Route>  
       </Routes>  

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { eventApi } from '../api/axiosConfig';
 import type { Event } from '../types';
-import { useNavigate } from 'react-router-dom';
 import { EventModal } from './EventModal';
 
 export const EventList: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
     const [message, setMessage] = useState('');
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
-    const navigate = useNavigate();
     const storedUser = localStorage.getItem('user');
     const user = storedUser ? JSON.parse(storedUser) : null;
 
@@ -35,8 +33,8 @@ export const EventList: React.FC = () => {
 
         <hr />
         <br />
-        <div id="events" style={{ padding: '30px', gap:'200px', margin: '0 auto', display:'flex', justifyContent:'center', background:'rgb(225, 236, 236)', borderRadius:'16px'}}>
-            <div style={{flex: 1}}>
+        <div id="events" style={{ padding: '30px', margin: '0 auto', display:'flex', justifyContent:'center', background:'rgb(225, 236, 236)', borderRadius:'16px', alignItems:'center'}}>
+            <div style={{flex: 0.6}}>
             <h2 style={{fontSize:'27px'}}>Catálogo de eventos</h2>
             <br />
             {message && <p style={{padding: '10px', background: '#e0f7fa', borderRadius: '4px'}}>{message}</p>}
@@ -72,14 +70,6 @@ export const EventList: React.FC = () => {
                             </div>
                         </div>
                             )}
-            </div>
-            <div style={{display:'flex', flexDirection:'column'}}>
-                <h2 style={{fontSize:'27px'}}>Gestión de reservas</h2>
-                <br />
-                <div style={{border:'1px solid #ddd',padding: '15px', borderRadius: '8px', display: 'flex',flexDirection:'column', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <button onClick={() => navigate('/bookings')} style={{width:'300px', height:'50px',fontSize:'18px'}}>Ver mis reservas</button>
-
-                </div>
             </div>
         </div>
     </div>

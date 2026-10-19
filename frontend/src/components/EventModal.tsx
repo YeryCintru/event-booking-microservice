@@ -1,5 +1,6 @@
 import { useState} from "react";
-import { bookingApi } from "../api/axiosConfig";
+import { useNavigate } from "react-router-dom";
+
 
 
 interface EventModalProps {
@@ -11,23 +12,9 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
     
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [message, setMessage] = useState('');
-    const storedUser = localStorage.getItem('user');
-    const user = storedUser ? JSON.parse(storedUser) : null;
+    const navigate = useNavigate();
 
-     const handleBooking = async (eventId: number) => {
-        const quantity = quantities[eventId] || 1;
-        try{
-            await bookingApi.post('',{
-                userId: user.id,
-                eventId,
-                ticketsCount: quantity,
-            });
-            setMessage(`¡Reserva de ${quantity} entrada(s) confirmada!`);
-        } catch(err: any) {
-            setMessage(err.response?.data?.message || 'Error al procesar la reserva');
-        }
-    };
-
+    setMessage('');
 
     return (
     <div key={event.id} style={{ 
@@ -65,10 +52,18 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
                 onChange={(e) => setQuantities ({... quantities, [event.id]: parseInt(e.target.value) || 1})}
                 style={{ width: '50px', marginRight: '10px' }}
             />
-            <button onClick={() => handleBooking(event.id)} disabled={event.availableCapacity <= 0}>
-                {event.availableCapacity > 0 ? 'Reservar' : 'Agotado'}
+            <button onClick={() => navigate('/checkout', {
+                state: {
+                    event: event,
+                    ticketAmount: quantities[event.id]
+                }
+            })} 
+            disabled={event.availableCapacity <= 0}>
+                Ir a pagar
             </button>
         </div>   
+        
+
         {message && (
             <p>{message}</p>
         )}                
