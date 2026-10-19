@@ -14,6 +14,8 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
+    setMessage('');
+
     return (
     <div key={event.id} style={{ 
     position: 'relative', // 1. IMPORTANTE: Esto sirve de "ancla" para el botón absoluto 

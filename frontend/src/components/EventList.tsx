@@ -8,7 +8,6 @@ export const EventList: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
     const [message, setMessage] = useState('');
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
-    const navigate = useNavigate();
     const storedUser = localStorage.getItem('user');
     const user = storedUser ? JSON.parse(storedUser) : null;
 
