@@ -3,9 +3,9 @@ server:
 
 spring:
   application:
-    name: api-gateaway
+    name: api-gateway
   cloud:
-    gateaway:
+    gateway:
       # Configuracion de los CORS global
       globalcors:
         cors-configurations:
@@ -30,12 +30,12 @@ spring:
             
         # Ruta hacia Event Service
         - id: event-service
-          uri: ${AUTH_SERVICE_URL:http://localhost:8082}
+          uri: ${EVENT_SERVICE_URL:http://localhost:8082}
           predicates:
             - Path=/api/event/**
         # Ruta hacia Booking Service
         - id: booking-service
-          uri: ${AUTH_SERVICE_URL:http://localhost:8083}
+          uri: ${BOOKING_SERVICE_URL:http://localhost:8083}
           predicates:
             - Path=/api/booking/**
   
@@ -43,4 +43,4 @@ spring:
     endpoints:
       web:
         exposure:
-          include: health, info, gateaway
+          include: health, info, gateway
