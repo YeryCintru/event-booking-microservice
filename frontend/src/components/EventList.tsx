@@ -28,7 +28,7 @@ export const EventList: React.FC = () => {
     return(
         <div>
 
-        <h1 style={{fontSize:'30px'}}>Bienvenido, <span style={{color:'rgb(57, 85, 85)'}}> {user.email}</span></h1>
+        <h1 style={{fontSize:'30px'}}>Bienvenido, <span style={{color:'rgb(57, 85, 85)'}}> {user?.email}</span></h1>
         <p style={{fontSize:'20px', color:'rgb(90, 132, 132)'}}>¡Consulta los eventos disponibles!</p>
 
         <hr />
