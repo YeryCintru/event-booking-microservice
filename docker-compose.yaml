@@ -93,14 +93,14 @@ services:
 
   # Api-gateaway
   api-gateaway:
-    build: ./api-gateaway
+    build: ./services/api-gateaway
     container_name: api-gateaway
     ports:
       - "8080:8080"
     environment:
-      - AUTH-SERVICE_URL=http://auth-service:8081
-      - EVENT-SERVICE_URL=http://event-service:8082
-      - BOOKING-SERVICE_URL=http://booking-service:8083
+      - AUTH_SERVICE_URL=http://auth-service:8081
+      - EVENT_SERVICE_URL=http://event-service:8082
+      - BOOKING_SERVICE_URL=http://booking-service:8083
     depends_on:
       - auth-service
       - event-service
