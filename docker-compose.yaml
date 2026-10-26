@@ -55,7 +55,7 @@ services:
       - auth-db
   # EventService
   event-service:
-    image: eventbooking/event-service:v1
+    build: ./services/event-service
     container_name: event-service
     ports:
       - "8082:8082" 
@@ -75,8 +75,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://booking-db:5432/booking_db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgrespassword
-      - AUTH_SERVICE_URL=http://auth-service:8081
-      - EVENT_SERVICE_URL=http://event-service:8082
+      - API_URL=http://api-gateway:8080
     depends_on:
       - booking-db
       - auth-service
@@ -84,7 +83,7 @@ services:
 
   # Frontend
   frontend:
-    image: eventbooking/frontend:v1
+    build: ./frontend
     container_name: frontend
     ports:
       - "80:80"
@@ -94,7 +93,7 @@ services:
   # Api-gateaway
   api-gateaway:
     build: ./services/api-gateaway
-    container_name: api-gateaway
+    container_name: api-gateway
     ports:
       - "8080:8080"
     environment:
