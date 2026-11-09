@@ -26,7 +26,6 @@ import com.stripe.model.PaymentIntent;
 @RestController
 @RequestMapping("/api/bookings")
 @RequiredArgsConstructor
-@CrossOrigin(origins = { "http://localhost:5173", "http://localhost:80", "http://localhost" })
 public class BookingController {
 
     private final BookingService bookingService;

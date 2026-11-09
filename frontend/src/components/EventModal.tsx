@@ -11,10 +11,7 @@ interface EventModalProps {
 export const EventModal = ({event, closeModal}: EventModalProps) => {
     
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
-    const [message, setMessage] = useState('');
     const navigate = useNavigate();
-
-    setMessage('');
 
     return (
     <div key={event.id} style={{ 
@@ -62,11 +59,7 @@ export const EventModal = ({event, closeModal}: EventModalProps) => {
                 Ir a pagar
             </button>
         </div>   
-        
-
-        {message && (
-            <p>{message}</p>
-        )}                
+                     
     </div>
 </div>
 

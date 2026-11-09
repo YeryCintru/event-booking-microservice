@@ -1,17 +1,16 @@
 import axios from 'axios';
 
 export const authApi = axios.create({
-    baseURL: 'http://localhost:8081/api/auth'
+    baseURL: `${import.meta.env.VITE_API_URL}/api/auth`
 });
 
 export const eventApi = axios.create({
-    baseURL: 'http://localhost:8082/api/events'
+    baseURL: `${import.meta.env.VITE_API_URL}/api/events`
 });
 
 export const bookingApi = axios.create({
-    baseURL: 'http://localhost:8083/api/bookings'
+    baseURL: `${import.meta.env.VITE_API_URL}/api/bookings`
 });
-
 
 // Interceptor para inyectar el token JWT en las reservas
 bookingApi.interceptors.request.use((config) => {

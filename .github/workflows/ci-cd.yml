@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        service: [auth-service, event-service, booking-service]
+        service: [auth-service, event-service, booking-service, api-gateaway]
 
     steps:
       - name: Checkout code
@@ -84,6 +84,13 @@ jobs:
           context: ./services/booking-service
           push: false
           tags: eventbooking/booking-service:test
+
+      - name: Build imagen API Gateway
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/api-gateaway
+          push: false
+          tags: eventbooking/api-gateway:test
 
       - name: Build imagen Frontend
         uses: docker/build-push-action@v5
