@@ -126,16 +126,11 @@ spec:
                 secretKeyRef: 
                   name: db-credentials
                   key: postgres-password
-            - name: AUTH_SERVICE_URL
+            - name: API_URL
               valueFrom:
                 configMapKeyRef:
                   name: app-config
-                  key: AUTH_SERVICE_URL
-            - name: EVENT_SERVICE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: app-config
-                  key: EVENT_SERVICE_URL
+                  key: API_URL
 ---
 apiVersion: v1
 kind: Service
