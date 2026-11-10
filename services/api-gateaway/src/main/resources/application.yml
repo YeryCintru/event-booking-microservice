@@ -38,9 +38,12 @@ spring:
           uri: ${BOOKING_SERVICE_URL:http://localhost:8083}
           predicates:
             - Path=/api/bookings/**
-  
+
 management:
   endpoints:
     web:
       exposure:
-        include: health, info, gateway
+        include: health, info, gateway, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
