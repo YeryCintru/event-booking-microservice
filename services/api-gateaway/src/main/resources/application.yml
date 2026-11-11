@@ -38,9 +38,18 @@ spring:
           uri: ${BOOKING_SERVICE_URL:http://localhost:8083}
           predicates:
             - Path=/api/bookings/**
-  
+
 management:
   endpoints:
     web:
       exposure:
-        include: health, info, gateway
+        include: health, info, gateway, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  zipkin:
+    tracing:
+      endpoint: ${MANAGEMENT_ZIPKIN_URL:http://zipkin:9411/api/v2/spans}
+  tracing:
+    sampling:
+      probability: 1.0 # 100% de las peticiones rastreadas (en producción se reduce, ej: 0.1)
