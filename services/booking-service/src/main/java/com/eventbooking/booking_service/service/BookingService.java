@@ -5,20 +5,14 @@ import com.eventbooking.booking_service.client.*;
 import com.eventbooking.booking_service.config.RabbitMQConfig;
 import com.eventbooking.booking_service.model.Booking;
 import com.eventbooking.booking_service.repository.BookingRepository;
-import com.eventbooking.booking_service.service.TicketGeneratorService;
-
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-
-import javax.print.attribute.standard.Media;
 
 import java.time.LocalDateTime;
 
@@ -70,9 +64,21 @@ public class BookingService {
         }
 
         // 4. Reducir la capacidad disponible del evento
-        eventClient.reduceCapacity(bookingRequestDTO.getEventId(), bookingRequestDTO.getTicketsCount());
+        //eventClient.reduceCapacity(bookingRequestDTO.getEventId(), bookingRequestDTO.getTicketsCount());
 
-        // 5. Crear la reserva y guardarla en la base de datos
+
+        // 5. Publicar un evento de "Booking Created" en RabbitMQ 
+        BookingCreatedEvent bookingCreatedEvent = new BookingCreatedEvent(
+                bookingRequestDTO.getEventId(),
+                bookingRequestDTO.getTicketsCount()
+        );
+
+        rabbitTemplate.convertAndSend(
+            RabbitMQConfig.EXCHANGE_NAME, 
+            RabbitMQConfig.ROUTING_KEY, 
+            bookingCreatedEvent);
+
+        // 6. Crear la reserva y guardarla en la base de datos
         Booking booking = Booking.builder()
                 .userId(bookingRequestDTO.getUserId())
                 .eventId(bookingRequestDTO.getEventId())
@@ -81,22 +87,7 @@ public class BookingService {
                 .status("CONFIRMED") // Valor por defecto
                 .build();
         
-        Booking savedBooking = bookingRepository.save(booking);
-
-        // 6. Publicar un evento de "Booking Created" en RabbitMQ
-        BookingCreatedEvent bookingCreatedEvent = new BookingCreatedEvent(
-                savedBooking.getId(),
-                savedBooking.getUserId(),
-                savedBooking.getEventId(),
-                savedBooking.getCreatedAt()
-        );
-
-        rabbitTemplate.convertAndSend(
-            RabbitMQConfig.EXCHANGE_NAME, 
-            RabbitMQConfig.ROUTING_KEY, 
-            bookingCreatedEvent);
-
-        return savedBooking;
+        return bookingRepository.save(booking);
     }
 
     /**
