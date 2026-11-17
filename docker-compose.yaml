@@ -135,6 +135,18 @@ services:
     ports:
       - "9411:9411"
 
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # Puerto de mensajería para Spring Boot
+      - "15672:15672" # Puerto de la interfaz web (Management UI)
+
+networks:
+  app-network:
+    driver: bridge
+
 volumes:
   auth_db_data:
   event_db_data:
